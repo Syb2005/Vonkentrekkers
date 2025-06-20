@@ -10,3 +10,5 @@ Voor het genereren van deze puls gebruiken we eerst een 555-timer, die van een 1
 
 De volgende stap is het meten van het elektromagnetisch veld dat hiermee wordt opgewekt. Op basis daarvan willen we een schakeling of demonstratieopstelling ontwikkelen die de effecten van EMI duidelijk en visueel weergeeft.
 
+Als een korte samenvating is hieronder ook de poster van de posterprentatie weergegeven. Meer info is d=te vinden in de wiki
+![555 timer Dit is de driver van het systeem  Een 555 timer-IC zorgt voor een puls met een dutycycle van 50% en een instelbare frequentie  Deze puls wordt aan de gate van een IRF540 MOSFET gegeven o](https://github.com/user-attachments/assets/a685edf1-da0a-4df5-8972-11aaeba46910)
