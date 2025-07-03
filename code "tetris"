@@ -1,0 +1,81 @@
+#include <Adafruit_GFX.h>
+#include <Adafruit_ST7735.h>
+#include <SPI.h>
+
+// TFT pin definities
+#define TFT_CS     5
+#define TFT_RST    4
+#define TFT_DC     2
+#define TFT_BLK    21
+
+Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_RST);
+
+// Timing en achtergrondkleurwissel
+unsigned long lastUpdate = 0;
+const unsigned long interval = 500;  // 0.5 seconde
+uint16_t colors[] = {
+  ST77XX_RED, ST77XX_GREEN, ST77XX_BLUE,
+  ST77XX_YELLOW, ST77XX_CYAN, ST77XX_MAGENTA,
+  ST77XX_WHITE
+};
+int colorIndex = 0;
+
+// Schermgrootte voor 128x160 scherm 
+const int screenW = 128;
+const int screenH = 160;
+
+
+int boxX = 10, boxY = 10;
+const int boxSize = 15;
+int dx = 2, dy = 2;
+
+void setup() {
+  Serial.begin(115200);
+
+  pinMode(TFT_BLK, OUTPUT);
+  digitalWrite(TFT_BLK, HIGH);  // Backlight aan
+
+  tft.initR(INITR_BLACKTAB);    // Voor 128x160 scherm
+  tft.setRotation(0);           // Staande oriëntatie
+  tft.fillScreen(colors[colorIndex]);
+
+  // Eerste keer blokje tekenen
+  tft.fillRect(boxX, boxY, boxSize, boxSize, ST77XX_BLACK);
+}
+
+void loop() {
+  unsigned long currentMillis = millis();
+
+  // 1. Vorige blokje wissen
+  tft.fillRect(boxX, boxY, boxSize, boxSize, colors[colorIndex]);
+
+n
+  boxX += dx;
+  boxY += dy;
+
+
+  if (boxX <= 0 || (boxX + boxSize) >= screenW) {
+    dx = -dx;
+    boxX += dx;
+  }
+
+  
+  if (boxY <= 0 || (boxY + boxSize) >= screenH) {
+    dy = -dy;
+    boxY += dy;
+  }
+
+ 
+  tft.fillRect(boxX, boxY, boxSize, boxSize, ST77XX_BLACK);
+
+  // 6. Wissel achtergrondkleur elke 0.5s
+  if (currentMillis - lastUpdate >= interval) {
+    lastUpdate = currentMillis;
+    colorIndex = (colorIndex + 1) % (sizeof(colors) / sizeof(colors[0]));
+    tft.fillScreen(colors[colorIndex]);
+
+   
+    tft.fillRect(boxX, boxY, boxSize, boxSize, ST77XX_BLACK);
+  }
+
+  delay(30);  //snelheid brokje
